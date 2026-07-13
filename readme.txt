@@ -4,7 +4,7 @@ Tags: woocommerce, bucharest, efactura, checkout, romania
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.1
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires Plugins: woocommerce
@@ -41,6 +41,8 @@ This plugin supports:
 
 Phase 1 and Phase 2 Blocks support includes sector selection, conditional visibility for Bucharest, validation, server-side city sync, and admin-configurable hide/readonly city behavior in Checkout Block.
 
+Phase 3 adds ship-to-different-address handling for Blocks, PHPUnit tests, CI, and extended testing documentation.
+
 == Installation ==
 
 1. Upload the plugin files to `/wp-content/plugins/bucharest-sector-selector-for-woocommerce`, or install the ZIP via **Plugins > Add New > Upload Plugin**.
@@ -76,6 +78,11 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 
 == Changelog ==
 
+= 1.3.0 =
+* Ship-to-different-address: skip duplicate shipping validation when billing and shipping match.
+* Blocks checkout: mirror billing sector/city to shipping when "Use same address" is enabled.
+* Added PHPUnit tests, Composer dev setup, GitHub Actions CI, and docs/TESTING.md.
+
 = 1.2.0 =
 * Checkout Block UI: sync city from sector via cart store.
 * Checkout Block UI: hide/readonly city respects plugin settings per billing/shipping.
@@ -90,6 +97,12 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+Improves Blocks checkout when billing and shipping use the same address; adds automated tests and CI.
+
+= 1.2.0 =
+Adds Checkout Block city hide/readonly UX and live city sync from sector selection.
 
 = 1.1.0 =
 Adds WooCommerce Checkout Block support while keeping classic checkout compatibility.

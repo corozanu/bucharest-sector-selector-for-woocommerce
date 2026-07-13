@@ -44,7 +44,7 @@ class BSSWOO_Blocks_Sync {
 			return;
 		}
 
-		if ( 'shipping' === $group && ! BSSWOO_Helpers::is_shipping_enabled() ) {
+		if ( ! BSSWOO_Helpers::should_validate_context( $group ) ) {
 			return;
 		}
 
@@ -145,6 +145,8 @@ class BSSWOO_Blocks_Sync {
 			BSSWOO_Helpers::apply_sector_to_order( $order, $context, $state, $sector );
 		}
 
+		BSSWOO_Helpers::mirror_billing_sector_to_shipping_order( $order );
+
 		/**
 		 * Fires after Blocks sector data has been synced on an order.
 		 *
@@ -166,8 +168,9 @@ class BSSWOO_Blocks_Sync {
 		}
 
 		BSSWOO_Helpers::sync_customer_city_from_sector( $customer, 'billing' );
+		BSSWOO_Helpers::mirror_billing_sector_to_shipping( $customer );
 
-		if ( BSSWOO_Helpers::is_shipping_enabled() ) {
+		if ( BSSWOO_Helpers::is_shipping_enabled() && ! BSSWOO_Helpers::is_shipping_same_as_billing( $customer ) ) {
 			BSSWOO_Helpers::sync_customer_city_from_sector( $customer, 'shipping' );
 		}
 	}

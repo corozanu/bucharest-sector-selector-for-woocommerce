@@ -92,7 +92,7 @@ class BSSWOO_Blocks_Fields {
 			return true;
 		}
 
-		if ( 'shipping' === $group && ! BSSWOO_Helpers::is_shipping_enabled() ) {
+		if ( ! BSSWOO_Helpers::should_validate_context( $group ) ) {
 			return true;
 		}
 
@@ -125,13 +125,13 @@ class BSSWOO_Blocks_Fields {
 			return;
 		}
 
-		if ( 'shipping' === $group && ! BSSWOO_Helpers::is_shipping_enabled() ) {
+		if ( ! BSSWOO_Helpers::should_validate_context( $group ) ) {
 			return;
 		}
 
 		$field_id = BSSWOO_Helpers::get_blocks_field_id();
 		$sector   = BSSWOO_Helpers::sanitize_sector( $fields[ $field_id ] ?? '' );
-		$state    = $this->get_address_state_for_group( $group );
+		$state    = BSSWOO_Helpers::get_customer_state_for_context( $group );
 
 		if ( ! BSSWOO_Helpers::is_bucharest_state( $state ) ) {
 			return;
@@ -156,23 +156,5 @@ class BSSWOO_Blocks_Fields {
 		);
 
 		$errors->add( 'bsswoo_missing_sector', BSSWOO_Helpers::get_missing_sector_message( $group ) );
-	}
-
-	/**
-	 * Resolve the state for the address group being validated.
-	 *
-	 * @param string $group billing|shipping.
-	 * @return string
-	 */
-	private function get_address_state_for_group( string $group ): string {
-		if ( ! function_exists( 'WC' ) || ! WC()->customer ) {
-			return '';
-		}
-
-		$customer = WC()->customer;
-
-		return 'billing' === $group
-			? (string) $customer->get_billing_state()
-			: (string) $customer->get_shipping_state();
 	}
 }

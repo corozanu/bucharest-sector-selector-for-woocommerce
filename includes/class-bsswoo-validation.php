@@ -169,7 +169,7 @@ class BSSWOO_Validation {
 			return;
 		}
 
-		if ( 'shipping' === $address_type && ! BSSWOO_Helpers::is_shipping_enabled() ) {
+		if ( 'shipping' === $address_type && ! BSSWOO_Helpers::should_validate_context( $address_type, $customer ) ) {
 			return;
 		}
 
@@ -215,7 +215,7 @@ class BSSWOO_Validation {
 			return;
 		}
 
-		if ( 'shipping' === $address_type && ! BSSWOO_Helpers::is_shipping_enabled() ) {
+		if ( 'shipping' === $address_type && ! BSSWOO_Helpers::should_validate_context( $address_type, $customer ) ) {
 			return;
 		}
 

@@ -495,6 +495,184 @@ class BSSWOO_Helpers {
 	}
 
 	/**
+	 * Determine whether an address context should be validated.
+	 *
+	 * @param string           $context  billing|shipping.
+	 * @param WC_Customer|null $customer Optional customer object.
+	 * @return bool
+	 */
+	public static function should_validate_context( string $context, ?WC_Customer $customer = null ): bool {
+		if ( ! self::is_enabled() ) {
+			return false;
+		}
+
+		if ( 'shipping' === $context && ! self::is_shipping_enabled() ) {
+			return false;
+		}
+
+		if ( 'shipping' === $context && self::is_shipping_same_as_billing( $customer ) ) {
+			return false;
+		}
+
+		/**
+		 * Filter whether an address context should be validated.
+		 *
+		 * @param bool        $should_validate Whether to validate the context.
+		 * @param string      $context         Address context.
+		 * @param WC_Customer|null $customer   Customer object if available.
+		 */
+		return (bool) apply_filters( 'bsswoo_should_validate_context', true, $context, $customer );
+	}
+
+	/**
+	 * Compare billing and shipping addresses on a customer object.
+	 *
+	 * @param WC_Customer|null $customer Customer object.
+	 * @return bool
+	 */
+	public static function is_shipping_same_as_billing( ?WC_Customer $customer = null ): bool {
+		if ( ! function_exists( 'WC' ) ) {
+			return false;
+		}
+
+		$customer = $customer ?? WC()->customer;
+
+		if ( ! $customer instanceof WC_Customer ) {
+			return false;
+		}
+
+		$fields = array(
+			'first_name',
+			'last_name',
+			'company',
+			'address_1',
+			'address_2',
+			'city',
+			'state',
+			'postcode',
+			'country',
+		);
+
+		foreach ( $fields as $field ) {
+			$billing_getter  = 'get_billing_' . $field;
+			$shipping_getter = 'get_shipping_' . $field;
+
+			if ( ! method_exists( $customer, $billing_getter ) || ! method_exists( $customer, $shipping_getter ) ) {
+				continue;
+			}
+
+			if ( (string) $customer->$billing_getter() !== (string) $customer->$shipping_getter() ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get the state value for an address context from the active customer.
+	 *
+	 * @param string           $context  billing|shipping.
+	 * @param WC_Customer|null $customer Customer object.
+	 * @return string
+	 */
+	public static function get_customer_state_for_context( string $context, ?WC_Customer $customer = null ): string {
+		if ( ! function_exists( 'WC' ) ) {
+			return '';
+		}
+
+		$customer = $customer ?? WC()->customer;
+
+		if ( ! $customer instanceof WC_Customer ) {
+			return '';
+		}
+
+		return 'billing' === $context
+			? (string) $customer->get_billing_state()
+			: (string) $customer->get_shipping_state();
+	}
+
+	/**
+	 * Mirror billing sector/city values to shipping when both addresses match.
+	 *
+	 * @param WC_Customer $customer Customer object.
+	 * @return void
+	 */
+	public static function mirror_billing_sector_to_shipping( WC_Customer $customer ): void {
+		if ( ! self::is_shipping_enabled() || ! self::is_shipping_same_as_billing( $customer ) ) {
+			return;
+		}
+
+		if ( ! self::is_bucharest_state( $customer->get_billing_state() ) ) {
+			return;
+		}
+
+		$sector = self::get_blocks_sector_from_customer( $customer, 'billing' );
+
+		if ( '' === $sector ) {
+			$sector = self::sanitize_sector( $customer->get_billing_city() );
+		}
+
+		if ( '' === $sector ) {
+			return;
+		}
+
+		$customer->set_shipping_city( $sector );
+
+		if ( $customer->get_id() > 0 ) {
+			update_user_meta( $customer->get_id(), 'shipping_sector_bucuresti', $sector );
+		}
+
+		self::debug_log(
+			'Mirrored billing sector to shipping for matching addresses.',
+			array( 'sector' => $sector )
+		);
+	}
+
+	/**
+	 * Mirror billing sector/city values to shipping on an order when addresses match.
+	 *
+	 * @param WC_Order $order Order object.
+	 * @return void
+	 */
+	public static function mirror_billing_sector_to_shipping_order( WC_Order $order ): void {
+		if ( ! self::is_shipping_enabled() ) {
+			return;
+		}
+
+		$fields = array(
+			'first_name',
+			'last_name',
+			'company',
+			'address_1',
+			'address_2',
+			'city',
+			'state',
+			'postcode',
+			'country',
+		);
+
+		foreach ( $fields as $field ) {
+			$getter = 'get_billing_' . $field;
+			$setter = 'get_shipping_' . $field;
+
+			if ( method_exists( $order, $getter ) && method_exists( $order, $setter ) ) {
+				if ( (string) $order->$getter() !== (string) $order->$setter() ) {
+					return;
+				}
+			}
+		}
+
+		$sector = self::get_order_sector( $order, 'billing' );
+
+		if ( '' === $sector || ! self::is_bucharest_state( $order->get_billing_state() ) ) {
+			return;
+		}
+
+		self::apply_sector_to_order( $order, 'shipping', $order->get_shipping_state(), $sector );
+	}
+
+	/**
 	 * Check if debug mode is enabled.
 	 *
 	 * @return bool

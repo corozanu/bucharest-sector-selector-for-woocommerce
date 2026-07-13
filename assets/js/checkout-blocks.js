@@ -98,6 +98,79 @@
 	}
 
 	/**
+	 * @return {object|null}
+	 */
+	function getCheckoutSelect() {
+		if (!window.wp || !wp.data) {
+			return null;
+		}
+
+		return wp.data.select('wc/store/checkout');
+	}
+
+	/**
+	 * Whether shipping address matches billing in Blocks checkout.
+	 *
+	 * @return {boolean}
+	 */
+	function isShippingSameAsBilling() {
+		var checkoutSelect = getCheckoutSelect();
+
+		if (checkoutSelect && typeof checkoutSelect.getUseShippingAsBilling === 'function') {
+			return !!checkoutSelect.getUseShippingAsBilling();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Mirror billing sector/city to shipping when addresses match.
+	 *
+	 * @param {object} billingAddress Billing address object.
+	 * @return {void}
+	 */
+	function mirrorBillingToShipping(billingAddress) {
+		var dispatch = getCartDispatch();
+		var select = getCartSelect();
+
+		if (!dispatch || !select || !billingAddress || syncing.shipping) {
+			return;
+		}
+
+		if (!isBucharestState(billingAddress.state)) {
+			return;
+		}
+
+		var sector = getSectorFromAddress(billingAddress);
+
+		if (!sector) {
+			sector = (billingAddress.city || '').trim();
+		}
+
+		if (!sector || !isSectorCity(sector)) {
+			return;
+		}
+
+		var shipping = select.getShippingAddress();
+		var update = Object.assign({}, shipping, {
+			city: sector,
+		});
+
+		update[fieldId] = sector;
+
+		if ((shipping.city || '').trim() === sector && getSectorFromAddress(shipping) === sector) {
+			return;
+		}
+
+		syncing.shipping = true;
+		dispatch.setShippingAddress(update);
+
+		window.setTimeout(function () {
+			syncing.shipping = false;
+		}, 0);
+	}
+
+	/**
 	 * Get sector value from a Blocks address object.
 	 *
 	 * @param {object} address Address object.
@@ -270,11 +343,23 @@
 				return;
 			}
 
-			handleAddressChange('billing', select.getBillingAddress());
+			var billingAddress = select.getBillingAddress();
 
-			if (config.shippingEnabled) {
-				handleAddressChange('shipping', select.getShippingAddress());
+			handleAddressChange('billing', billingAddress);
+
+			if (!config.shippingEnabled) {
+				return;
 			}
+
+			if (isShippingSameAsBilling()) {
+				var billingIsBucharest = billingAddress && isBucharestState(billingAddress.state);
+
+				applyUiState('shipping', billingIsBucharest);
+				mirrorBillingToShipping(billingAddress);
+				return;
+			}
+
+			handleAddressChange('shipping', select.getShippingAddress());
 		});
 	}
 
