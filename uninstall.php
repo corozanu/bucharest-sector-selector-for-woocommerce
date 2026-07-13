@@ -7,7 +7,7 @@
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-$options = array(
+$bsswoo_options = array(
 	'bsswoo_enabled',
 	'bsswoo_shipping_enabled',
 	'bsswoo_hide_city',
@@ -25,15 +25,15 @@ $options = array(
 	'swbe_debug',
 );
 
-foreach ( $options as $option ) {
-	delete_option( $option );
+foreach ( $bsswoo_options as $bsswoo_option ) {
+	delete_option( $bsswoo_option );
 }
 
-$user_meta_keys = array(
+$bsswoo_user_meta_keys = array(
 	'billing_sector_bucuresti',
 	'shipping_sector_bucuresti',
 );
 
-foreach ( $user_meta_keys as $meta_key ) {
-	delete_metadata( 'user', 0, $meta_key, '', true );
+foreach ( $bsswoo_user_meta_keys as $bsswoo_meta_key ) {
+	delete_metadata( 'user', 0, $bsswoo_meta_key, '', true );
 }

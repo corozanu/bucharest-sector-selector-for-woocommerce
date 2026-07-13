@@ -4,7 +4,7 @@ Tags: woocommerce, bucharest, efactura, checkout, romania
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires Plugins: woocommerce
@@ -84,6 +84,10 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 
 == Changelog ==
 
+= 1.4.3 =
+* Plugin Check: sanitize checkout POST inputs, prefix uninstall variables, remove discouraged load_plugin_textdomain() call.
+* Fixed undefined customer object in My Account address save handler.
+
 = 1.4.2 =
 * Updated compatibility headers after testing on WordPress 7.0.1 and WooCommerce 10.9.1.
 
@@ -114,6 +118,9 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.4.3 =
+WordPress.org Plugin Check compliance fixes.
 
 = 1.4.2 =
 Documents compatibility with WordPress 7.0.1 and WooCommerce 10.9.1.

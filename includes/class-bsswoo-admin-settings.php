@@ -29,7 +29,7 @@ class BSSWOO_Admin_Settings extends WC_Settings_Page {
 	 */
 	public function get_settings(): array {
 		return apply_filters(
-			'woocommerce_get_settings_' . $this->id,
+			'woocommerce_get_settings_' . $this->id, // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce core settings filter.
 			array(
 				array(
 					'title' => __( 'Bucharest Sector Selector', 'bucharest-sector-selector-for-woocommerce' ),

@@ -40,7 +40,8 @@ class BSSWOO_Validation {
 			return;
 		}
 
-		$ship_to_different = isset( $_POST['ship_to_different_address'] ) && wc_string_to_bool( wp_unslash( $_POST['ship_to_different_address'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$ship_to_different_raw = isset( $_POST['ship_to_different_address'] ) ? sanitize_text_field( wp_unslash( $_POST['ship_to_different_address'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$ship_to_different     = wc_string_to_bool( $ship_to_different_raw );
 
 		if ( $ship_to_different ) {
 			$this->validate_context( 'shipping' );
@@ -58,7 +59,7 @@ class BSSWOO_Validation {
 		$sector_key = $context . '_sector_bucuresti';
 
 		$state  = isset( $_POST[ $state_key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $state_key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$sector = isset( $_POST[ $sector_key ] ) ? BSSWOO_Helpers::sanitize_sector( wp_unslash( $_POST[ $sector_key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$sector = isset( $_POST[ $sector_key ] ) ? BSSWOO_Helpers::sanitize_sector( sanitize_text_field( wp_unslash( $_POST[ $sector_key ] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! BSSWOO_Helpers::is_bucharest_state( $state ) ) {
 			return;
@@ -215,6 +216,12 @@ class BSSWOO_Validation {
 			return;
 		}
 
+		if ( 'shipping' === $address_type && ! BSSWOO_Helpers::is_shipping_enabled() ) {
+			return;
+		}
+
+		$customer = new WC_Customer( $user_id );
+
 		if ( 'shipping' === $address_type && ! BSSWOO_Helpers::should_validate_context( $address_type, $customer ) ) {
 			return;
 		}
@@ -224,7 +231,7 @@ class BSSWOO_Validation {
 		$city_key   = $address_type . '_city';
 
 		$state  = isset( $_POST[ $state_key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $state_key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$sector = isset( $_POST[ $sector_key ] ) ? BSSWOO_Helpers::sanitize_sector( wp_unslash( $_POST[ $sector_key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$sector = isset( $_POST[ $sector_key ] ) ? BSSWOO_Helpers::sanitize_sector( sanitize_text_field( wp_unslash( $_POST[ $sector_key ] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! BSSWOO_Helpers::is_bucharest_state( $state ) ) {
 			delete_user_meta( $user_id, $sector_key );
