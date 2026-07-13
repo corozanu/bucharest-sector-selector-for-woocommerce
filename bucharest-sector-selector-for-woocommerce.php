@@ -3,7 +3,7 @@
  * Plugin Name:       Bucharest Sector Selector for WooCommerce
  * Plugin URI:        https://github.com/corozanu/bucharest-sector-selector-for-woocommerce
  * Description:       Adds Bucharest sector selection at checkout for e-Factura / SPV ANAF address compatibility.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Requires at least: 6.0
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -21,11 +21,33 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BSSWOO_VERSION', '1.3.0' );
+define( 'BSSWOO_VERSION', '1.4.0' );
 define( 'BSSWOO_PLUGIN_FILE', __FILE__ );
 define( 'BSSWOO_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BSSWOO_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'BSSWOO_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+
+/**
+ * Declare compatibility with WooCommerce features (HPOS, Checkout Block).
+ */
+function bsswoo_declare_woocommerce_compatibility(): void {
+	if ( ! class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+		return;
+	}
+
+	\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+		'custom_order_tables',
+		BSSWOO_PLUGIN_FILE,
+		true
+	);
+
+	\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+		'cart_checkout_blocks',
+		BSSWOO_PLUGIN_FILE,
+		true
+	);
+}
+add_action( 'before_woocommerce_init', 'bsswoo_declare_woocommerce_compatibility' );
 
 /**
  * Autoload plugin classes.

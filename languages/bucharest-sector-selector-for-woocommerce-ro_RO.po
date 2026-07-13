@@ -1,3 +1,4 @@
+# Romanian translation for Bucharest Sector Selector for WooCommerce.
 # Copyright (C) 2026 Catalin Corozanu
 # This file is distributed under the GPL v2 or later.
 msgid ""
@@ -5,112 +6,111 @@ msgstr ""
 "Project-Id-Version: Bucharest Sector Selector for WooCommerce 1.4.0\n"
 "Report-Msgid-Bugs-To: https://github.com/corozanu/bucharest-sector-selector-for-woocommerce/issues\n"
 "POT-Creation-Date: 2026-07-13 12:30+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2026-07-13 15:30+0300\n"
+"Last-Translator: Catalin Corozanu <https://crz.ro>\n"
+"Language-Team: Romanian\n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || n%100>=2 && n%100<=19) ? 1 : 2);\n"
 "X-Domain: bucharest-sector-selector-for-woocommerce\n"
 
 #: bucharest-sector-selector-for-woocommerce.php
 msgid "Bucharest Sector Selector for WooCommerce requires WooCommerce to be installed and active."
-msgstr ""
+msgstr "Bucharest Sector Selector for WooCommerce necesită WooCommerce instalat și activ."
 
 #: includes/class-bsswoo-admin-order.php
-msgid "Sector București"
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "eFactura Sector"
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Bucharest Sector Selector"
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Configure sector selection for Bucharest addresses to ensure SPV ANAF / e-Factura compatibility. Checkout Block support requires WooCommerce 8.9 or newer."
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Enable plugin logic"
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Enable Bucharest sector selection and city sync."
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Enable shipping address logic"
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Apply the same logic to the shipping address when it differs from billing."
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Hide city field for Bucharest"
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Hide the city/locality field when Bucharest is selected. Applies to classic checkout and Checkout Block."
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Make city readonly instead of hidden"
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Only applies when the city field is not hidden. The city will be auto-filled with the selected sector in classic checkout and Checkout Block."
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Debug mode"
-msgstr ""
-
-#: includes/class-bsswoo-admin-settings.php
-msgid "Log plugin events to WooCommerce logs (source: bsswoo)."
-msgstr ""
-
 #: includes/class-bsswoo-blocks-fields.php
 #: includes/class-bsswoo-helpers.php
 msgid "Sector București"
-msgstr ""
+msgstr "Sector București"
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "eFactura Sector"
+msgstr "eFactura Sector"
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Bucharest Sector Selector"
+msgstr "Selector Sector București"
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Configure sector selection for Bucharest addresses to ensure SPV ANAF / e-Factura compatibility. Checkout Block support requires WooCommerce 8.9 or newer."
+msgstr "Configurați selecția sectorului pentru adresele din București, pentru compatibilitate SPV ANAF / e-Factura. Suportul Checkout Block necesită WooCommerce 8.9 sau mai nou."
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Enable plugin logic"
+msgstr "Activează logica pluginului"
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Enable Bucharest sector selection and city sync."
+msgstr "Activează selecția sectorului București și sincronizarea orașului."
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Enable shipping address logic"
+msgstr "Activează logica pentru adresa de livrare"
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Apply the same logic to the shipping address when it differs from billing."
+msgstr "Aplică aceeași logică adresei de livrare când diferă de cea de facturare."
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Hide city field for Bucharest"
+msgstr "Ascunde câmpul oraș pentru București"
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Hide the city/locality field when Bucharest is selected. Applies to classic checkout and Checkout Block."
+msgstr "Ascunde câmpul oraș/localitate când este selectat București. Se aplică la checkout clasic și Checkout Block."
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Make city readonly instead of hidden"
+msgstr "Fă câmpul oraș doar-citire în loc de ascuns"
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Only applies when the city field is not hidden. The city will be auto-filled with the selected sector in classic checkout and Checkout Block."
+msgstr "Se aplică doar când câmpul oraș nu este ascuns. Orașul va fi completat automat cu sectorul selectat în checkout clasic și Checkout Block."
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Debug mode"
+msgstr "Mod depanare"
+
+#: includes/class-bsswoo-admin-settings.php
+msgid "Log plugin events to WooCommerce logs (source: bsswoo)."
+msgstr "Înregistrează evenimentele pluginului în jurnalele WooCommerce (sursă: bsswoo)."
 
 #: includes/class-bsswoo-frontend-assets.php
 #: includes/class-bsswoo-helpers.php
 msgid "Selectează sectorul"
-msgstr ""
+msgstr "Selectează sectorul"
 
 #: includes/class-bsswoo-helpers.php
 msgid "Sector 1"
-msgstr ""
+msgstr "Sector 1"
 
 #: includes/class-bsswoo-helpers.php
 msgid "Sector 2"
-msgstr ""
+msgstr "Sector 2"
 
 #: includes/class-bsswoo-helpers.php
 msgid "Sector 3"
-msgstr ""
+msgstr "Sector 3"
 
 #: includes/class-bsswoo-helpers.php
 msgid "Sector 4"
-msgstr ""
+msgstr "Sector 4"
 
 #: includes/class-bsswoo-helpers.php
 msgid "Sector 5"
-msgstr ""
+msgstr "Sector 5"
 
 #: includes/class-bsswoo-helpers.php
 msgid "Sector 6"
-msgstr ""
+msgstr "Sector 6"
 
 #: includes/class-bsswoo-helpers.php
 msgid "Pentru adresa de facturare din București, selectați sectorul."
-msgstr ""
+msgstr "Pentru adresa de facturare din București, selectați sectorul."
 
 #: includes/class-bsswoo-helpers.php
 msgid "Pentru adresa de livrare din București, selectați sectorul."
-msgstr ""
+msgstr "Pentru adresa de livrare din București, selectați sectorul."

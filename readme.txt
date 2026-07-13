@@ -4,7 +4,7 @@ Tags: woocommerce, bucharest, efactura, checkout, romania
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.1
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires Plugins: woocommerce
@@ -43,6 +43,8 @@ Phase 1 and Phase 2 Blocks support includes sector selection, conditional visibi
 
 Phase 3 adds ship-to-different-address handling for Blocks, PHPUnit tests, CI, and extended testing documentation.
 
+Phase 4 adds HPOS compatibility, Romanian translations, and WordPress.org submission assets and documentation.
+
 == Installation ==
 
 1. Upload the plugin files to `/wp-content/plugins/bucharest-sector-selector-for-woocommerce`, or install the ZIP via **Plugins > Add New > Upload Plugin**.
@@ -51,6 +53,10 @@ Phase 3 adds ship-to-different-address handling for Blocks, PHPUnit tests, CI, a
 4. Configure the plugin under **WooCommerce > Settings > eFactura Sector**.
 
 == Frequently Asked Questions ==
+
+= Is this compatible with WooCommerce HPOS (High-Performance Order Storage)? =
+
+Yes. The plugin declares compatibility with WooCommerce custom order tables and stores order data through the `WC_Order` API.
 
 = Does this work with WooCommerce Blocks checkout? =
 
@@ -78,6 +84,11 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 
 == Changelog ==
 
+= 1.4.0 =
+* Declared WooCommerce HPOS and Checkout Block compatibility.
+* Added Romanian (ro_RO) translation files.
+* Added WordPress.org submission guide and plugin directory assets.
+
 = 1.3.0 =
 * Ship-to-different-address: skip duplicate shipping validation when billing and shipping match.
 * Blocks checkout: mirror billing sector/city to shipping when "Use same address" is enabled.
@@ -97,6 +108,9 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Adds HPOS compatibility declaration, Romanian translations, and WordPress.org release preparation.
 
 = 1.3.0 =
 Improves Blocks checkout when billing and shipping use the same address; adds automated tests and CI.
