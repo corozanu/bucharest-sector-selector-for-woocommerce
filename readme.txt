@@ -1,5 +1,5 @@
 === Bucharest Sector Selector for WooCommerce ===
-Contributors: corozanu
+Contributors: catalin28
 Tags: woocommerce, bucharest, efactura, checkout, romania
 Requires at least: 6.0
 Tested up to: 6.8
