@@ -1,0 +1,19 @@
+.bsswoo-sector-hidden {
+	display: none !important;
+}
+
+.bsswoo-city-hidden {
+	display: none !important;
+}
+
+.bsswoo-city-readonly input,
+.bsswoo-city-readonly .input-text {
+	background-color: #f6f7f7;
+	cursor: not-allowed;
+}
+
+.woocommerce-billing-fields .bsswoo-sector-field,
+.woocommerce-shipping-fields .bsswoo-sector-field,
+.woocommerce-address-fields .bsswoo-sector-field {
+	margin-bottom: 1em;
+}

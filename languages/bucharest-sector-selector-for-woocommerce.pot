@@ -1,0 +1,58 @@
+# Copyright (C) 2026 Catalin Corozanu
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Bucharest Sector Selector for WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/corozanu/bucharest-sector-selector-for-woocommerce/issues\n"
+"POT-Creation-Date: 2026-07-13 12:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: bucharest-sector-selector-for-woocommerce\n"
+
+#: includes/class-bsswoo-helpers.php
+msgid "Selectează sectorul"
+msgstr ""
+
+#: includes/class-bsswoo-helpers.php
+msgid "Sector 1"
+msgstr ""
+
+#: includes/class-bsswoo-helpers.php
+msgid "Sector 2"
+msgstr ""
+
+#: includes/class-bsswoo-helpers.php
+msgid "Sector 3"
+msgstr ""
+
+#: includes/class-bsswoo-helpers.php
+msgid "Sector 4"
+msgstr ""
+
+#: includes/class-bsswoo-helpers.php
+msgid "Sector 5"
+msgstr ""
+
+#: includes/class-bsswoo-helpers.php
+msgid "Sector 6"
+msgstr ""
+
+#: includes/class-bsswoo-helpers.php
+msgid "Sector București"
+msgstr ""
+
+#: bucharest-sector-selector-for-woocommerce.php
+msgid "Bucharest Sector Selector for WooCommerce requires WooCommerce to be installed and active."
+msgstr ""
+
+#: includes/class-bsswoo-validation.php
+msgid "Pentru adresa de facturare din București, selectați sectorul."
+msgstr ""
+
+#: includes/class-bsswoo-validation.php
+msgid "Pentru adresa de livrare din București, selectați sectorul."
+msgstr ""
