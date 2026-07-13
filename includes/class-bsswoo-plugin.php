@@ -48,6 +48,20 @@ class BSSWOO_Plugin {
 	public BSSWOO_Admin_Order $admin_order;
 
 	/**
+	 * Blocks checkout fields handler.
+	 *
+	 * @var BSSWOO_Blocks_Fields
+	 */
+	public BSSWOO_Blocks_Fields $blocks_fields;
+
+	/**
+	 * Blocks checkout sync handler.
+	 *
+	 * @var BSSWOO_Blocks_Sync
+	 */
+	public BSSWOO_Blocks_Sync $blocks_sync;
+
+	/**
 	 * Get singleton instance.
 	 *
 	 * @return BSSWOO_Plugin
@@ -67,7 +81,9 @@ class BSSWOO_Plugin {
 		$this->checkout_fields = new BSSWOO_Checkout_Fields();
 		$this->frontend_assets = new BSSWOO_Frontend_Assets();
 		$this->validation      = new BSSWOO_Validation();
-		$this->admin_order     = new BSSWOO_Admin_Order();
+		$this->admin_order       = new BSSWOO_Admin_Order();
+		$this->blocks_fields     = new BSSWOO_Blocks_Fields();
+		$this->blocks_sync       = new BSSWOO_Blocks_Sync();
 
 		add_filter( 'woocommerce_get_settings_pages', array( $this, 'register_settings_page' ) );
 

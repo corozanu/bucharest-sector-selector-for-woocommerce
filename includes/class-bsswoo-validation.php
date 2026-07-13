@@ -79,9 +79,7 @@ class BSSWOO_Validation {
 				array( 'context' => $context )
 			);
 
-			$message = 'billing' === $context
-				? __( 'Pentru adresa de facturare din București, selectați sectorul.', 'bucharest-sector-selector-for-woocommerce' )
-				: __( 'Pentru adresa de livrare din București, selectați sectorul.', 'bucharest-sector-selector-for-woocommerce' );
+			$message = BSSWOO_Helpers::get_missing_sector_message( $context );
 
 			wc_add_notice( $message, 'error' );
 			return;
@@ -140,61 +138,20 @@ class BSSWOO_Validation {
 	private function persist_order_context( WC_Order $order, string $context, array $data ): void {
 		$state_key  = $context . '_state';
 		$sector_key = $context . '_sector_bucuresti';
-		$city_key   = $context . '_city';
-		$meta_key   = '_' . $sector_key;
 
 		$state  = $data[ $state_key ] ?? '';
 		$sector = BSSWOO_Helpers::sanitize_sector( $data[ $sector_key ] ?? '' );
 
+		if ( '' === $sector ) {
+			$sector = BSSWOO_Helpers::get_blocks_sector_from_order( $order, $context );
+		}
+
 		if ( ! BSSWOO_Helpers::is_bucharest_state( $state ) ) {
-			$order->delete_meta_data( $meta_key );
+			$order->delete_meta_data( BSSWOO_Helpers::get_sector_meta_key( $context ) );
 			return;
 		}
 
-		if ( '' !== $sector ) {
-			$order->update_meta_data( $meta_key, $sector );
-
-			/**
-			 * Fires before the city is set from the selected sector.
-			 *
-			 * @param string   $sector  Selected sector.
-			 * @param string   $context Address context.
-			 * @param WC_Order $order   Order object.
-			 */
-			do_action( 'bsswoo_before_set_city', $sector, $context, $order );
-
-			if ( 'billing' === $context ) {
-				$order->set_billing_city( $sector );
-			} else {
-				$order->set_shipping_city( $sector );
-			}
-
-			BSSWOO_Helpers::debug_log(
-				'Order city set from sector.',
-				array(
-					'context'  => $context,
-					'sector'   => $sector,
-					'order_id' => $order->get_id(),
-				)
-			);
-
-			/**
-			 * Fires after the city has been set from the selected sector.
-			 *
-			 * @param string   $sector  Selected sector.
-			 * @param string   $context Address context.
-			 * @param WC_Order $order   Order object.
-			 */
-			do_action( 'bsswoo_after_set_city', $sector, $context, $order );
-		} elseif ( isset( $data[ $city_key ] ) ) {
-			$city = sanitize_text_field( $data[ $city_key ] );
-
-			if ( 'billing' === $context ) {
-				$order->set_billing_city( $city );
-			} else {
-				$order->set_shipping_city( $city );
-			}
-		}
+		BSSWOO_Helpers::apply_sector_to_order( $order, $context, $state, $sector );
 	}
 
 	/**
@@ -235,11 +192,7 @@ class BSSWOO_Validation {
 				)
 			);
 
-			$message = 'billing' === $address_type
-				? __( 'Pentru adresa de facturare din București, selectați sectorul.', 'bucharest-sector-selector-for-woocommerce' )
-				: __( 'Pentru adresa de livrare din București, selectați sectorul.', 'bucharest-sector-selector-for-woocommerce' );
-
-			$errors->add( 'bsswoo_missing_sector', $message );
+			$errors->add( 'bsswoo_missing_sector', BSSWOO_Helpers::get_missing_sector_message( $address_type ) );
 			return;
 		}
 

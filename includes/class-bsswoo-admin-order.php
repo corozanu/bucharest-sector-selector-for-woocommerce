@@ -52,25 +52,9 @@ class BSSWOO_Admin_Order {
 	 * @return void
 	 */
 	private function render_sector( WC_Order $order, string $context ): void {
-		$meta_key = '_' . $context . '_sector_bucuresti';
-		$sector   = (string) $order->get_meta( $meta_key );
+		$sector = BSSWOO_Helpers::get_order_sector( $order, $context );
 
 		if ( '' === $sector ) {
-			$city = 'billing' === $context ? $order->get_billing_city() : $order->get_shipping_city();
-
-			if ( BSSWOO_Helpers::is_sector_city( $city ) ) {
-				$sector = $city;
-			}
-		}
-
-		if ( '' === $sector ) {
-			return;
-		}
-
-		$city = 'billing' === $context ? $order->get_billing_city() : $order->get_shipping_city();
-
-		if ( $city === $sector ) {
-			echo '<p><strong>' . esc_html__( 'Sector București', 'bucharest-sector-selector-for-woocommerce' ) . ':</strong> ' . esc_html( $sector ) . '</p>';
 			return;
 		}
 

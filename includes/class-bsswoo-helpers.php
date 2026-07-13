@@ -13,7 +13,296 @@ defined( 'ABSPATH' ) || exit;
 class BSSWOO_Helpers {
 
 	/**
-	 * Sector city values used for auto-sync detection.
+	 * Blocks checkout additional field ID.
+	 */
+	public const BLOCKS_FIELD_ID = 'bucharest-sector-selector-for-woocommerce/sector';
+
+	/**
+	 * Get the Blocks checkout additional field ID.
+	 *
+	 * @return string
+	 */
+	public static function get_blocks_field_id(): string {
+		/**
+		 * Filter the Blocks checkout additional field ID.
+		 *
+		 * @param string $field_id Field ID.
+		 */
+		return (string) apply_filters( 'bsswoo_blocks_field_id', self::BLOCKS_FIELD_ID );
+	}
+
+	/**
+	 * Get the WooCommerce Blocks CheckoutFields service if available.
+	 *
+	 * @return object|null
+	 */
+	public static function get_checkout_fields_service(): ?object {
+		if ( ! class_exists( '\Automattic\WooCommerce\Blocks\Package' ) ) {
+			return null;
+		}
+
+		try {
+			return \Automattic\WooCommerce\Blocks\Package::container()->get(
+				\Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFields::class
+			);
+		} catch ( Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+			return null;
+		}
+	}
+
+	/**
+	 * Whether the Additional Checkout Fields API is available.
+	 *
+	 * @return bool
+	 */
+	public static function is_blocks_api_available(): bool {
+		return function_exists( 'woocommerce_register_additional_checkout_field' );
+	}
+
+	/**
+	 * Get sector options formatted for the Blocks checkout API.
+	 *
+	 * @return array<int, array<string, string>>
+	 */
+	public static function get_blocks_select_options(): array {
+		$options = array(
+			array(
+				'value' => '',
+				'label' => __( 'Selectează sectorul', 'bucharest-sector-selector-for-woocommerce' ),
+			),
+		);
+
+		foreach ( self::SECTOR_VALUES as $sector ) {
+			$options[] = array(
+				'value' => $sector,
+				'label' => __( $sector, 'bucharest-sector-selector-for-woocommerce' ), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+			);
+		}
+
+		/**
+		 * Filter sector options for the Blocks checkout field.
+		 *
+		 * @param array<int, array<string, string>> $options Select options.
+		 */
+		return apply_filters( 'bsswoo_blocks_select_options', $options );
+	}
+
+	/**
+	 * JSON Schema conditions used to hide the Blocks sector field.
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	public static function get_blocks_hidden_schema(): array {
+		$schema = array(
+			array(
+				'type'       => 'object',
+				'properties' => array(
+					'customer' => array(
+						'properties' => array(
+							'address' => array(
+								'properties' => array(
+									'country' => array(
+										'not' => array(
+											'const' => 'RO',
+										),
+									),
+								),
+							),
+						),
+					),
+				),
+			),
+			array(
+				'type'       => 'object',
+				'properties' => array(
+					'customer' => array(
+						'properties' => array(
+							'address' => array(
+								'properties' => array(
+									'state' => array(
+										'not' => array(
+											'const' => 'B',
+										),
+									),
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+
+		/**
+		 * Filter JSON Schema used to hide the Blocks sector field.
+		 *
+		 * @param array<int, array<string, mixed>> $schema Hidden schema rules.
+		 */
+		return apply_filters( 'bsswoo_blocks_hidden_schema', $schema );
+	}
+
+	/**
+	 * JSON Schema conditions used to require the Blocks sector field.
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	public static function get_blocks_required_schema(): array {
+		$schema = array(
+			array(
+				'type'       => 'object',
+				'properties' => array(
+					'customer' => array(
+						'properties' => array(
+							'address' => array(
+								'properties' => array(
+									'country' => array(
+										'const' => 'RO',
+									),
+									'state'   => array(
+										'const' => 'B',
+									),
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+
+		/**
+		 * Filter JSON Schema used to require the Blocks sector field.
+		 *
+		 * @param array<int, array<string, mixed>> $schema Required schema rules.
+		 */
+		return apply_filters( 'bsswoo_blocks_required_schema', $schema );
+	}
+
+	/**
+	 * Read a sector value from Blocks checkout data on an order.
+	 *
+	 * @param WC_Order $order   Order object.
+	 * @param string   $context billing|shipping.
+	 * @return string
+	 */
+	public static function get_blocks_sector_from_order( WC_Order $order, string $context ): string {
+		$service = self::get_checkout_fields_service();
+
+		if ( $service && method_exists( $service, 'get_field_from_object' ) ) {
+			$value = $service->get_field_from_object( self::get_blocks_field_id(), $order, $context );
+
+			if ( is_string( $value ) && '' !== $value ) {
+				return self::sanitize_sector( $value );
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Get the legacy sector meta key for an address context.
+	 *
+	 * @param string $context billing|shipping.
+	 * @return string
+	 */
+	public static function get_sector_meta_key( string $context ): string {
+		return '_' . $context . '_sector_bucuresti';
+	}
+
+	/**
+	 * Resolve the sector value for an order address context.
+	 *
+	 * @param WC_Order $order   Order object.
+	 * @param string   $context billing|shipping.
+	 * @return string
+	 */
+	public static function get_order_sector( WC_Order $order, string $context ): string {
+		$legacy = self::sanitize_sector( (string) $order->get_meta( self::get_sector_meta_key( $context ) ) );
+
+		if ( '' !== $legacy ) {
+			return $legacy;
+		}
+
+		$blocks = self::get_blocks_sector_from_order( $order, $context );
+
+		if ( '' !== $blocks ) {
+			return $blocks;
+		}
+
+		$city = 'billing' === $context ? $order->get_billing_city() : $order->get_shipping_city();
+
+		return self::is_sector_city( $city ) ? $city : '';
+	}
+
+	/**
+	 * Apply sector data to an order address context.
+	 *
+	 * @param WC_Order $order   Order object.
+	 * @param string   $context billing|shipping.
+	 * @param string   $state   State value.
+	 * @param string   $sector  Sector value.
+	 * @return void
+	 */
+	public static function apply_sector_to_order( WC_Order $order, string $context, string $state, string $sector ): void {
+		$meta_key = self::get_sector_meta_key( $context );
+		$sector   = self::sanitize_sector( $sector );
+
+		if ( ! self::is_bucharest_state( $state ) ) {
+			$order->delete_meta_data( $meta_key );
+			return;
+		}
+
+		if ( '' === $sector ) {
+			return;
+		}
+
+		$order->update_meta_data( $meta_key, $sector );
+
+		/**
+		 * Fires before the city is set from the selected sector.
+		 *
+		 * @param string   $sector  Selected sector.
+		 * @param string   $context Address context.
+		 * @param WC_Order $order   Order object.
+		 */
+		do_action( 'bsswoo_before_set_city', $sector, $context, $order );
+
+		if ( 'billing' === $context ) {
+			$order->set_billing_city( $sector );
+		} else {
+			$order->set_shipping_city( $sector );
+		}
+
+		self::debug_log(
+			'Order city set from sector.',
+			array(
+				'context'  => $context,
+				'sector'   => $sector,
+				'order_id' => $order->get_id(),
+				'source'   => 'blocks',
+			)
+		);
+
+		/**
+		 * Fires after the city has been set from the selected sector.
+		 *
+		 * @param string   $sector  Selected sector.
+		 * @param string   $context Address context.
+		 * @param WC_Order $order   Order object.
+		 */
+		do_action( 'bsswoo_after_set_city', $sector, $context, $order );
+	}
+
+	/**
+	 * Get validation message for a missing sector.
+	 *
+	 * @param string $context billing|shipping.
+	 * @return string
+	 */
+	public static function get_missing_sector_message( string $context ): string {
+		return 'billing' === $context
+			? __( 'Pentru adresa de facturare din București, selectați sectorul.', 'bucharest-sector-selector-for-woocommerce' )
+			: __( 'Pentru adresa de livrare din București, selectați sectorul.', 'bucharest-sector-selector-for-woocommerce' );
+	}
+
 	 *
 	 * @var string[]
 	 */

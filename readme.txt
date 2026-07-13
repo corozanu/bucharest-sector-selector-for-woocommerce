@@ -4,7 +4,7 @@ Tags: woocommerce, bucharest, efactura, checkout, romania
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires Plugins: woocommerce
@@ -34,7 +34,12 @@ This helps ensure order address data matches the mapping required by Romanian e-
 
 **Checkout compatibility**
 
-This plugin supports **classic WooCommerce checkout** and **My Account address editing** only. It does **not** support the WooCommerce Cart/Checkout Blocks at this time.
+This plugin supports:
+
+* **Classic WooCommerce checkout** (shortcode-based)
+* **WooCommerce Checkout Block** (WooCommerce 8.9+ Additional Checkout Fields API)
+
+Phase 1 Blocks support includes sector selection, conditional visibility for Bucharest, validation, and server-side city sync. Hiding or making the city field readonly in the Blocks UI is planned for a later phase.
 
 == Installation ==
 
@@ -47,7 +52,11 @@ This plugin supports **classic WooCommerce checkout** and **My Account address e
 
 = Does this work with WooCommerce Blocks checkout? =
 
-No. This plugin supports classic WooCommerce checkout and My Account address editing only.
+Yes, starting with version 1.1.0. The plugin uses the WooCommerce Additional Checkout Fields API (WooCommerce 8.9+). Classic checkout and Checkout Block are both supported.
+
+= Does this work with classic checkout? =
+
+Yes. The plugin targets classic WooCommerce checkout and My Account address editing.
 
 = Will billing_city contain the sector value? =
 
@@ -67,10 +76,18 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 
 == Changelog ==
 
+= 1.1.0 =
+* Added WooCommerce Checkout Block support (Phase 1).
+* Registered sector field via Additional Checkout Fields API.
+* Synced Blocks sector values to legacy order meta and city fields.
+
 = 1.0.0 =
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Adds WooCommerce Checkout Block support while keeping classic checkout compatibility.
 
 = 1.0.0 =
 Initial release.

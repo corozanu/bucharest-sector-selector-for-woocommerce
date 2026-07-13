@@ -34,7 +34,7 @@ class BSSWOO_Admin_Settings extends WC_Settings_Page {
 				array(
 					'title' => __( 'Bucharest Sector Selector', 'bucharest-sector-selector-for-woocommerce' ),
 					'type'  => 'title',
-					'desc'  => __( 'Configure sector selection for Bucharest addresses to ensure SPV ANAF / e-Factura compatibility.', 'bucharest-sector-selector-for-woocommerce' ),
+					'desc'  => __( 'Configure sector selection for Bucharest addresses to ensure SPV ANAF / e-Factura compatibility. Checkout Block support requires WooCommerce 8.9 or newer.', 'bucharest-sector-selector-for-woocommerce' ),
 					'id'    => 'bsswoo_settings_title',
 				),
 				array(
