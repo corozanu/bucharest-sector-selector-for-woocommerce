@@ -19,6 +19,7 @@ class BSSWOO_Blocks_Sync {
 		add_action( 'woocommerce_set_additional_field_value', array( $this, 'sync_additional_field_value' ), 10, 4 );
 		add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( $this, 'sync_order_from_store_api' ), 20, 2 );
 		add_action( 'woocommerce_checkout_create_order', array( $this, 'sync_order_on_create' ), 25, 1 );
+		add_action( 'woocommerce_store_api_cart_update_customer_from_request', array( $this, 'sync_customer_from_store_api' ), 20, 2 );
 	}
 
 	/**
@@ -150,5 +151,24 @@ class BSSWOO_Blocks_Sync {
 		 * @param WC_Order $order Order object.
 		 */
 		do_action( 'bsswoo_blocks_order_synced', $order );
+	}
+
+	/**
+	 * Sync city values when Blocks checkout updates the customer via Store API.
+	 *
+	 * @param WC_Customer     $customer Customer object.
+	 * @param WP_REST_Request $request  Request object.
+	 * @return void
+	 */
+	public function sync_customer_from_store_api( WC_Customer $customer, WP_REST_Request $request ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+		if ( ! BSSWOO_Helpers::is_enabled() ) {
+			return;
+		}
+
+		BSSWOO_Helpers::sync_customer_city_from_sector( $customer, 'billing' );
+
+		if ( BSSWOO_Helpers::is_shipping_enabled() ) {
+			BSSWOO_Helpers::sync_customer_city_from_sector( $customer, 'shipping' );
+		}
 	}
 }

@@ -53,14 +53,14 @@ class BSSWOO_Admin_Settings extends WC_Settings_Page {
 				),
 				array(
 					'title'   => __( 'Hide city field for Bucharest', 'bucharest-sector-selector-for-woocommerce' ),
-					'desc'    => __( 'Hide the city/locality field when Bucharest is selected.', 'bucharest-sector-selector-for-woocommerce' ),
+					'desc'    => __( 'Hide the city/locality field when Bucharest is selected. Applies to classic checkout and Checkout Block.', 'bucharest-sector-selector-for-woocommerce' ),
 					'id'      => 'bsswoo_hide_city',
 					'type'    => 'checkbox',
 					'default' => 'yes',
 				),
 				array(
 					'title'       => __( 'Make city readonly instead of hidden', 'bucharest-sector-selector-for-woocommerce' ),
-					'desc'        => __( 'Only applies when the city field is not hidden. The city will be auto-filled with the selected sector.', 'bucharest-sector-selector-for-woocommerce' ),
+					'desc'        => __( 'Only applies when the city field is not hidden. The city will be auto-filled with the selected sector in classic checkout and Checkout Block.', 'bucharest-sector-selector-for-woocommerce' ),
 					'id'          => 'bsswoo_readonly_city',
 					'type'        => 'checkbox',
 					'default'     => 'no',

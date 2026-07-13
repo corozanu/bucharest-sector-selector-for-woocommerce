@@ -12,6 +12,28 @@
 	cursor: not-allowed;
 }
 
+.bsswoo-blocks-hide-billing-city .wc-block-checkout__billing-fields .wc-block-components-address-form__city,
+.bsswoo-blocks-hide-billing-city .wp-block-woocommerce-checkout .wc-block-checkout__billing-fields .wc-block-components-address-form__city {
+	display: none !important;
+}
+
+.bsswoo-blocks-hide-shipping-city .wc-block-checkout__shipping-fields .wc-block-components-address-form__city,
+.bsswoo-blocks-hide-shipping-city .wp-block-woocommerce-checkout .wc-block-checkout__shipping-fields .wc-block-components-address-form__city {
+	display: none !important;
+}
+
+.bsswoo-blocks-readonly-billing-city .wc-block-checkout__billing-fields .wc-block-components-address-form__city input,
+.bsswoo-blocks-readonly-billing-city .wp-block-woocommerce-checkout .wc-block-checkout__billing-fields .wc-block-components-address-form__city input {
+	background-color: #f6f7f7;
+	cursor: not-allowed;
+}
+
+.bsswoo-blocks-readonly-shipping-city .wc-block-checkout__shipping-fields .wc-block-components-address-form__city input,
+.bsswoo-blocks-readonly-shipping-city .wp-block-woocommerce-checkout .wc-block-checkout__shipping-fields .wc-block-components-address-form__city input {
+	background-color: #f6f7f7;
+	cursor: not-allowed;
+}
+
 .woocommerce-billing-fields .bsswoo-sector-field,
 .woocommerce-shipping-fields .bsswoo-sector-field,
 .woocommerce-address-fields .bsswoo-sector-field {

@@ -198,6 +198,60 @@ class BSSWOO_Helpers {
 	}
 
 	/**
+	 * Read a sector value from Blocks checkout data on a customer.
+	 *
+	 * @param WC_Customer $customer Customer object.
+	 * @param string      $context  billing|shipping.
+	 * @return string
+	 */
+	public static function get_blocks_sector_from_customer( WC_Customer $customer, string $context ): string {
+		$service = self::get_checkout_fields_service();
+
+		if ( $service && method_exists( $service, 'get_field_from_object' ) ) {
+			$value = $service->get_field_from_object( self::get_blocks_field_id(), $customer, $context );
+
+			if ( is_string( $value ) && '' !== $value ) {
+				return self::sanitize_sector( $value );
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Sync city on a customer address from the selected sector when applicable.
+	 *
+	 * @param WC_Customer $customer Customer object.
+	 * @param string      $context  billing|shipping.
+	 * @return void
+	 */
+	public static function sync_customer_city_from_sector( WC_Customer $customer, string $context ): void {
+		$state = 'billing' === $context ? $customer->get_billing_state() : $customer->get_shipping_state();
+
+		if ( ! self::is_bucharest_state( $state ) ) {
+			return;
+		}
+
+		$sector = self::get_blocks_sector_from_customer( $customer, $context );
+
+		if ( '' === $sector && $customer->get_id() > 0 ) {
+			$sector = self::sanitize_sector(
+				(string) get_user_meta( $customer->get_id(), $context . '_sector_bucuresti', true )
+			);
+		}
+
+		if ( '' === $sector ) {
+			return;
+		}
+
+		if ( 'billing' === $context ) {
+			$customer->set_billing_city( $sector );
+		} else {
+			$customer->set_shipping_city( $sector );
+		}
+	}
+
+	/**
 	 * Get the legacy sector meta key for an address context.
 	 *
 	 * @param string $context billing|shipping.
@@ -303,6 +357,8 @@ class BSSWOO_Helpers {
 			: __( 'Pentru adresa de livrare din București, selectați sectorul.', 'bucharest-sector-selector-for-woocommerce' );
 	}
 
+	/**
+	 * Sector city values used for auto-sync detection.
 	 *
 	 * @var string[]
 	 */

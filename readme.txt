@@ -4,7 +4,7 @@ Tags: woocommerce, bucharest, efactura, checkout, romania
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.1
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires Plugins: woocommerce
@@ -39,7 +39,7 @@ This plugin supports:
 * **Classic WooCommerce checkout** (shortcode-based)
 * **WooCommerce Checkout Block** (WooCommerce 8.9+ Additional Checkout Fields API)
 
-Phase 1 Blocks support includes sector selection, conditional visibility for Bucharest, validation, and server-side city sync. Hiding or making the city field readonly in the Blocks UI is planned for a later phase.
+Phase 1 and Phase 2 Blocks support includes sector selection, conditional visibility for Bucharest, validation, server-side city sync, and admin-configurable hide/readonly city behavior in Checkout Block.
 
 == Installation ==
 
@@ -75,6 +75,11 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 1. Sector dropdown displayed when Bucharest is selected at checkout.
 
 == Changelog ==
+
+= 1.2.0 =
+* Checkout Block UI: sync city from sector via cart store.
+* Checkout Block UI: hide/readonly city respects plugin settings per billing/shipping.
+* Store API customer sync for city values during Blocks checkout.
 
 = 1.1.0 =
 * Added WooCommerce Checkout Block support (Phase 1).

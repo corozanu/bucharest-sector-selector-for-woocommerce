@@ -40,6 +40,36 @@ class BSSWOO_Frontend_Assets {
 			BSSWOO_VERSION
 		);
 
+		$config = array(
+			'bucharestStates'  => $this->get_bucharest_state_values(),
+			'sectorValues'     => BSSWOO_Helpers::SECTOR_VALUES,
+			'hideCity'         => array(
+				'billing'  => BSSWOO_Helpers::should_hide_city( 'billing' ),
+				'shipping' => BSSWOO_Helpers::should_hide_city( 'shipping' ),
+			),
+			'readonlyCity'     => array(
+				'billing'  => BSSWOO_Helpers::should_readonly_city( 'billing' ),
+				'shipping' => BSSWOO_Helpers::should_readonly_city( 'shipping' ),
+			),
+			'shippingEnabled'  => BSSWOO_Helpers::is_shipping_enabled(),
+			'selectSectorText' => __( 'Selectează sectorul', 'bucharest-sector-selector-for-woocommerce' ),
+		);
+
+		if ( $this->is_block_checkout() && BSSWOO_Helpers::is_blocks_api_available() ) {
+			$this->enqueue_blocks_assets( $config );
+			return;
+		}
+
+		$this->enqueue_classic_assets( $config );
+	}
+
+	/**
+	 * Enqueue classic checkout and My Account assets.
+	 *
+	 * @param array<string, mixed> $config Shared script configuration.
+	 * @return void
+	 */
+	private function enqueue_classic_assets( array $config ): void {
 		$dependencies = array( 'jquery' );
 
 		if ( wp_script_is( 'wc-checkout', 'registered' ) ) {
@@ -54,24 +84,33 @@ class BSSWOO_Frontend_Assets {
 			true
 		);
 
-		wp_localize_script(
-			'bsswoo-checkout',
-			'bsswooCheckout',
-			array(
-				'bucharestStates'  => $this->get_bucharest_state_values(),
-				'sectorValues'     => BSSWOO_Helpers::SECTOR_VALUES,
-				'hideCity'         => array(
-					'billing'  => BSSWOO_Helpers::should_hide_city( 'billing' ),
-					'shipping' => BSSWOO_Helpers::should_hide_city( 'shipping' ),
-				),
-				'readonlyCity'     => array(
-					'billing'  => BSSWOO_Helpers::should_readonly_city( 'billing' ),
-					'shipping' => BSSWOO_Helpers::should_readonly_city( 'shipping' ),
-				),
-				'shippingEnabled'  => BSSWOO_Helpers::is_shipping_enabled(),
-				'selectSectorText' => __( 'Selectează sectorul', 'bucharest-sector-selector-for-woocommerce' ),
-			)
+		wp_localize_script( 'bsswoo-checkout', 'bsswooCheckout', $config );
+	}
+
+	/**
+	 * Enqueue WooCommerce Checkout Block assets.
+	 *
+	 * @param array<string, mixed> $config Shared script configuration.
+	 * @return void
+	 */
+	private function enqueue_blocks_assets( array $config ): void {
+		$dependencies = array( 'wp-data' );
+
+		if ( wp_script_is( 'wc-blocks-checkout', 'registered' ) ) {
+			$dependencies[] = 'wc-blocks-checkout';
+		}
+
+		wp_enqueue_script(
+			'bsswoo-checkout-blocks',
+			BSSWOO_PLUGIN_URL . 'assets/js/checkout-blocks.js',
+			$dependencies,
+			BSSWOO_VERSION,
+			true
 		);
+
+		$config['blocksFieldId'] = BSSWOO_Helpers::get_blocks_field_id();
+
+		wp_localize_script( 'bsswoo-checkout-blocks', 'bsswooBlocks', $config );
 	}
 
 	/**
@@ -93,6 +132,29 @@ class BSSWOO_Frontend_Assets {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Determine whether the current checkout page uses the Checkout Block.
+	 *
+	 * @return bool
+	 */
+	private function is_block_checkout(): bool {
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
+			return false;
+		}
+
+		$post = get_post();
+
+		if ( ! $post instanceof WP_Post ) {
+			return false;
+		}
+
+		if ( ! function_exists( 'has_block' ) ) {
+			return false;
+		}
+
+		return has_block( 'woocommerce/checkout', $post );
 	}
 
 	/**
