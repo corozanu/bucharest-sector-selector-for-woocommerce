@@ -4,12 +4,12 @@ Tags: woocommerce, bucharest, efactura, checkout, romania
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires Plugins: woocommerce
 WC requires at least: 7.0
-WC tested up to: 9.4
+WC tested up to: 10.9
 
 Adds Bucharest sector selection at WooCommerce checkout for e-Factura / SPV ANAF address compatibility.
 
@@ -84,6 +84,9 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 
 == Changelog ==
 
+= 1.4.2 =
+* Updated compatibility headers after testing on WordPress 7.0.1 and WooCommerce 10.9.1.
+
 = 1.4.1 =
 * Updated WordPress "Tested up to" header to 7.0.
 
@@ -111,6 +114,9 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.4.2 =
+Documents compatibility with WordPress 7.0.1 and WooCommerce 10.9.1.
 
 = 1.4.1 =
 Updates WordPress compatibility header for Plugin Directory requirements.

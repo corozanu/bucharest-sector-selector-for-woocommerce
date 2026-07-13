@@ -3,7 +3,7 @@
  * Plugin Name:       Bucharest Sector Selector for WooCommerce
  * Plugin URI:        https://github.com/corozanu/bucharest-sector-selector-for-woocommerce
  * Description:       Adds Bucharest sector selection at checkout for e-Factura / SPV ANAF address compatibility.
- * Version:           1.4.1
+ * Version:           1.4.2
  * Requires at least: 6.0
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -14,14 +14,14 @@
  * Text Domain:       bucharest-sector-selector-for-woocommerce
  * Domain Path:       /languages
  * WC requires at least: 7.0
- * WC tested up to:   9.4
+ * WC tested up to:   10.9
  *
  * @package BSSWOO
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BSSWOO_VERSION', '1.4.1' );
+define( 'BSSWOO_VERSION', '1.4.2' );
 define( 'BSSWOO_PLUGIN_FILE', __FILE__ );
 define( 'BSSWOO_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BSSWOO_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
