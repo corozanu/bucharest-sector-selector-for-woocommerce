@@ -2,9 +2,9 @@
 Contributors: catalin28
 Tags: woocommerce, bucharest, efactura, checkout, romania
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires Plugins: woocommerce
@@ -84,6 +84,9 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 
 == Changelog ==
 
+= 1.4.1 =
+* Updated WordPress "Tested up to" header to 7.0.
+
 = 1.4.0 =
 * Declared WooCommerce HPOS and Checkout Block compatibility.
 * Added Romanian (ro_RO) translation files.
@@ -108,6 +111,9 @@ No. The plugin does not add external links, tracking scripts, or branding on the
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.4.1 =
+Updates WordPress compatibility header for Plugin Directory requirements.
 
 = 1.4.0 =
 Adds HPOS compatibility declaration, Romanian translations, and WordPress.org release preparation.
